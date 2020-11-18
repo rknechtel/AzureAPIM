@@ -1,0 +1,19 @@
+<!-- 
+Here’s some outbound policy you can add to your API to pick up a special response header named RealHttpStatus and return that instead.
+"The policy begins by fetching the special response header called RealHttpStatus if it exists. The API should inject this header whenever it means to return something that might be misinterpreted or mishandled by the application server’s management tools. Next, the policy removes the special header so clients won’t see how our chicanery was perpetrated. Lastly, if the integer value of the special header is 404, the actual status returned by APIM will be 404, regardless of what the back end actually provided via the actual HTTP status code."
+Ref:
+http://devjourney.com/blog/2017/05/22/http-404-for-missing-api-resources/
+
+Management Outbound Policy to Return 404 Status
+-->
+<outbound>
+  <set-variable name="realHttpStatus" value="@(Convert.ToInt32(context.Response.Headers.GetValueOrDefault("RealHttpStatus", "0")))" />
+  <set-header name="RealHttpStatus" exists-action="delete" />
+  <base />
+  <choose>
+    <when condition="@(context.Variables.GetValueOrDefault<int>("realHttpStatus") == 404)">
+      <set-status code="@(context.Variables.GetValueOrDefault<int>("realHttpStatus"))" reason="Not Found" />
+    </when>
+    <otherwise></otherwise>
+  </choose>
+</outbound>

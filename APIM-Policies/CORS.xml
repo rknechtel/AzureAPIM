@@ -1,0 +1,29 @@
+ <!-- Add CORS to the inbound rules and set the headers in the outbound rules -->
+  <inbound>
+    <base />
+    <cors allow-credentials="true">
+      <allowed-origins>
+        <origin>http://website1.com</origin>
+        <origin>http://website2.com</origin>
+      </allowed-origins>
+      <allowed-methods>
+        <method>GET</method>
+      </allowed-methods>
+      <allowed-headers>
+        <header>content-type</header>
+        <header>accept</header>
+      </allowed-headers>
+    </cors>
+  </inbound>
+  <backend>
+    <base />
+  </backend>
+  <outbound>
+    <base />
+    <set-header name="Access-Control-Allow-Origin" exists-action="override">
+      <value>@(context.Request.Headers.GetValueOrDefault("Origin",""))</value>
+    </set-header>
+    <set-header name="Access-Control-Allow-Credentials" exists-action="override">
+      <value>true</value>
+    </set-header>
+  </outbound>
