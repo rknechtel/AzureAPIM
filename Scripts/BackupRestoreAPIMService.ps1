@@ -21,7 +21,10 @@
   Author:         Richard Knechtel
   Creation Date:  09/04/2020
   Purpose/Change: Initial script development
-  
+
+.LICENSE
+ This script is in the public domain, free from copyrights or restrictions.
+
 .EXAMPLE
   <Example goes here. Repeat this attribute for more than one example>
 #>
